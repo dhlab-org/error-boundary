@@ -7,20 +7,18 @@ export const getErrorConfig = (
   error: HTTPError | AxiosError,
   overrideConfig?: PartialErrorConfig,
 ) => {
-  const statusCode = error.response?.status ?? 500;
-  const statusCodeKey = Object.keys(HTTP_ERROR_CONFIG).includes(
-    statusCode.toString(),
+  const statusCode = Object.keys(HTTP_ERROR_CONFIG).includes(
+    error.response?.status?.toString() ?? "",
   )
-    ? statusCode
+    ? error.response?.status
     : 500;
 
   const defaultConfig =
-    HTTP_ERROR_CONFIG[statusCodeKey as keyof typeof HTTP_ERROR_CONFIG];
+    HTTP_ERROR_CONFIG[statusCode as keyof typeof HTTP_ERROR_CONFIG];
   const override =
-    overrideConfig?.[statusCodeKey as keyof typeof HTTP_ERROR_CONFIG];
+    overrideConfig?.[statusCode as keyof typeof HTTP_ERROR_CONFIG];
 
-  // 오버라이드가 있다면 사용, 없다면 기본 설정 사용
-  return override || defaultConfig;
+  return override ?? defaultConfig;
 };
 
 export const isAxiosError = (err: unknown): err is AxiosError => {

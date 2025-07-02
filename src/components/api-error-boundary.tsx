@@ -40,7 +40,7 @@ type ApiErrorBoundaryProps = {
 export function ApiErrorBoundary({
   children,
   FallbackContainer = ({ children }) => (
-    <div style={{ height: "100%" }}>{children}</div>
+    <div className="h-full">{children}</div>
   ),
   Button = DefaultButton,
   overrideConfig,
@@ -48,21 +48,28 @@ export function ApiErrorBoundary({
   ignoreError = [],
 }: ApiErrorBoundaryProps) {
   const handleError: ErrorBoundaryProps["onError"] = (error, info) => {
-    if (!(error instanceof HTTPError)) {
+    if (!isApiError(error)) {
       throw error;
     }
 
     const shouldIgnore = ignoreError.some((ignore) =>
       match(ignore)
-        .with(P.string, (ignoreStatusText) =>
-          error.response.statusText.match(ignoreStatusText),
-        )
-        .with(
-          P.number,
-          (ignoreStatus) => error.response.status === ignoreStatus,
-        )
+        .with(P.string, (ignoreStatusText) => {
+          const statusText =
+            error instanceof HTTPError
+              ? error.response.statusText
+              : error.response?.statusText || "";
+          return statusText.match(ignoreStatusText);
+        })
+        .with(P.number, (ignoreStatus) => {
+          const status =
+            error instanceof HTTPError
+              ? error.response.status
+              : error.response?.status || 0;
+          return status === ignoreStatus;
+        })
         .with(P.instanceOf(Function), (ignoreErrorFunction) =>
-          ignoreErrorFunction(error),
+          ignoreErrorFunction(error as HTTPError | AxiosError),
         )
         .otherwise(() => false),
     );
@@ -77,7 +84,11 @@ export function ApiErrorBoundary({
       "onError" in targetErrorConfig &&
       targetErrorConfig.onError
     ) {
-      targetErrorConfig.onError(error, info, error.response.status);
+      const status =
+        error instanceof HTTPError
+          ? error.response.status
+          : error.response?.status || 500;
+      targetErrorConfig.onError(error, info, status);
     }
   };
 
@@ -157,23 +168,17 @@ function ApiErrorFallback({
   };
 
   return match(targetErrorConfig)
-    .with({ type: "default" }, () => {
-      const message =
-        "message" in targetErrorConfig
-          ? targetErrorConfig.message
-          : "오류가 발생했습니다.";
-      const action =
-        "action" in targetErrorConfig ? targetErrorConfig.action : null;
-
-      return (
-        <div className="flex flex-col items-center justify-center h-full p-4 gap-y-2">
-          <p className="text-sm text-muted-foreground">{message}</p>
-          <Button onClick={handleActionButtonClick}>
-            {action?.message || "다시 시도하기"}
-          </Button>
-        </div>
-      );
-    })
+    .with(
+      { type: "default", action: { message: P._ }, message: P._ },
+      ({ action, message }) => {
+        return (
+          <div className="flex flex-col items-center justify-center h-full p-4 gap-y-2">
+            <p className="text-sm text-muted-foreground">{message}</p>
+            <Button onClick={handleActionButtonClick}>{action.message}</Button>
+          </div>
+        );
+      },
+    )
     .with({ type: "custom" }, (config) => {
       const { fallback } = config;
 

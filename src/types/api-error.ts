@@ -7,7 +7,7 @@ export type ErrorConfigElementType =
   (typeof HTTP_ERROR_CONFIG)[keyof typeof HTTP_ERROR_CONFIG];
 
 type OnErrorCallback = (
-  error: HTTPError,
+  error: HTTPError | AxiosError,
   info: ErrorInfo,
   statusCode: number,
 ) => void;
@@ -34,6 +34,6 @@ type CustomErrorConfigType = {
 
 export type PartialErrorConfig = {
   [K in keyof typeof HTTP_ERROR_CONFIG]?:
-    | DefaultErrorConfigType
-    | CustomErrorConfigType;
+    | ({ type: "default" } & DefaultErrorConfigType)
+    | ({ type: "custom" } & CustomErrorConfigType);
 };
