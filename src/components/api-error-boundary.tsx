@@ -13,7 +13,10 @@ import { P, match } from "ts-pattern";
 import type { PartialErrorConfig } from "../types/api-error";
 import { getErrorConfig, isApiError } from "../utils/api-error";
 
-type IgnoreErrorType = string | number | ((error: HTTPError) => boolean);
+type IgnoreErrorType =
+  | string
+  | number
+  | ((error: HTTPError | AxiosError) => boolean);
 
 const DefaultButton = (props: React.ComponentProps<"button">) => (
   <button
