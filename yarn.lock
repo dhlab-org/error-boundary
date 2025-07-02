@@ -204,7 +204,6 @@ __metadata:
     "@types/react-dom": "npm:^18.2.0"
     "@vitest/ui": "npm:^3.2.4"
     axios: "npm:^1.10.0"
-    es-toolkit: "npm:^1.39.5"
     jsdom: "npm:^26.1.0"
     ky: "npm:^1.8.1"
     react: "npm:^18.2.0"
@@ -1355,18 +1354,6 @@ __metadata:
     has-tostringtag: "npm:^1.0.2"
     hasown: "npm:^2.0.2"
   checksum: 10c0/ef2ca9ce49afe3931cb32e35da4dcb6d86ab02592cfc2ce3e49ced199d9d0bb5085fc7e73e06312213765f5efa47cc1df553a6a5154584b21448e9fb8355b1af
-  languageName: node
-  linkType: hard
-
-"es-toolkit@npm:^1.39.5":
-  version: 1.39.5
-  resolution: "es-toolkit@npm:1.39.5"
-  dependenciesMeta:
-    "@trivago/prettier-plugin-sort-imports@4.3.0":
-      unplugged: true
-    prettier-plugin-sort-re-exports@0.0.1:
-      unplugged: true
-  checksum: 10c0/4ab7ddee48832c1bb40e85f3095b998b0790b8c014af7d01a7096e46c0cfcef43b725abc8ac789d60d2ea372e067406ff936fd18446fa4d4c12cb803e08aa4e0
   languageName: node
   linkType: hard
 
