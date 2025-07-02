@@ -21,28 +21,13 @@ interface DefaultButtonProps {
   className?: string;
 }
 
-const DefaultButton: React.FC<DefaultButtonProps> = ({
-  onClick,
-  children,
-  className = "",
-}) => (
+const DefaultButton = (props: React.ComponentProps<"button">) => (
   <button
     type="button"
-    onClick={onClick}
-    className={`px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded border ${className}`}
-    style={{
-      cursor: "pointer",
-      border: "1px solid #d1d5db",
-      borderRadius: "4px",
-      padding: "8px 16px",
-      backgroundColor: "#f3f4f6",
-      color: "#374151",
-      fontSize: "14px",
-      fontWeight: "500",
-      transition: "background-color 0.2s",
-    }}
+    className={`px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded border ${props.className}`}
+    {...props}
   >
-    {children}
+    {props.children}
   </button>
 );
 
@@ -134,7 +119,6 @@ type ApiErrorFallbackProps = {
   resetErrorBoundary: FallbackProps["resetErrorBoundary"];
   overrideConfig?: PartialErrorConfig;
   Button: React.ComponentType<DefaultButtonProps>;
-  className?: string;
 };
 
 function ApiErrorFallback({
@@ -193,6 +177,14 @@ function ApiErrorFallback({
         </div>
       );
     })
-    .with({ type: "custom" }, (config) => config.fallback)
+    .with({ type: "custom" }, (config) => {
+      const { fallback } = config;
+
+      if (typeof fallback === "function") {
+        return fallback(error, resetErrorBoundary);
+      }
+
+      return fallback;
+    })
     .otherwise(() => null);
 }

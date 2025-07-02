@@ -1,6 +1,7 @@
-import type { HTTPError } from 'ky';
-import type { ErrorInfo } from 'react';
-import type { HTTP_ERROR_CONFIG } from '../constants/http-error-message';
+import type { AxiosError } from "axios";
+import type { HTTPError } from "ky";
+import type { ErrorInfo } from "react";
+import type { HTTP_ERROR_CONFIG } from "../constants/http-error-message";
 
 export type ErrorConfigElementType =
   (typeof HTTP_ERROR_CONFIG)[keyof typeof HTTP_ERROR_CONFIG];
@@ -12,18 +13,23 @@ type OnErrorCallback = (
 ) => void;
 
 type DefaultErrorConfigType = {
-  type: 'default';
+  type: "default";
   onError?: OnErrorCallback;
 } & Partial<
-  Omit<ErrorConfigElementType, 'action'> & {
-    action: Partial<ErrorConfigElementType['action']>;
+  Omit<ErrorConfigElementType, "action"> & {
+    action: Partial<ErrorConfigElementType["action"]>;
   }
 >;
 
 type CustomErrorConfigType = {
-  type: 'custom';
+  type: "custom";
   onError?: OnErrorCallback;
-  fallback: React.ReactNode;
+  fallback:
+    | React.ReactNode
+    | ((
+        error: HTTPError | AxiosError,
+        resetErrorBoundary: () => void,
+      ) => React.ReactNode);
 };
 
 export type PartialErrorConfig = {
