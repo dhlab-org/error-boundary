@@ -15,12 +15,6 @@ import { getErrorConfig, isApiError } from "../utils/api-error";
 
 type IgnoreErrorType = string | number | ((error: HTTPError) => boolean);
 
-interface DefaultButtonProps {
-  onClick: () => void;
-  children: React.ReactNode;
-  className?: string;
-}
-
 const DefaultButton = (props: React.ComponentProps<"button">) => (
   <button
     type="button"
@@ -34,7 +28,7 @@ const DefaultButton = (props: React.ComponentProps<"button">) => (
 type ApiErrorBoundaryProps = {
   children: React.ReactNode;
   FallbackContainer?: React.ComponentType<{ children: React.ReactNode }>;
-  Button?: React.ComponentType<DefaultButtonProps>;
+  Button?: React.ComponentType<React.ComponentProps<"button">>;
   overrideConfig?: PartialErrorConfig;
   resetKeys?: ErrorBoundaryProps["resetKeys"];
   ignoreError?: IgnoreErrorType[];
@@ -118,7 +112,7 @@ type ApiErrorFallbackProps = {
   error: HTTPError | AxiosError;
   resetErrorBoundary: FallbackProps["resetErrorBoundary"];
   overrideConfig?: PartialErrorConfig;
-  Button: React.ComponentType<DefaultButtonProps>;
+  Button: React.ComponentType<React.ComponentProps<"button">>;
 };
 
 function ApiErrorFallback({
