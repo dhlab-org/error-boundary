@@ -16,8 +16,9 @@ type DefaultErrorConfigType = {
   type: "default";
   onError?: OnErrorCallback;
 } & Partial<
-  Omit<ErrorConfigElementType, "action"> & {
+  Omit<ErrorConfigElementType, "action" | "message"> & {
     action: Partial<ErrorConfigElementType["action"]>;
+    message: string;
   }
 >;
 

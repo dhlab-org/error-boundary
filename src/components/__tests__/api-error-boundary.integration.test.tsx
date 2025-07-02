@@ -310,6 +310,7 @@ describe("ApiErrorBoundary Integration Tests", () => {
       const customConfig: PartialErrorConfig = {
         404: {
           type: "default",
+          message: "오류가 발생했습니다.",
           onError: onErrorSpy,
         },
       };
