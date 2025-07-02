@@ -1,6 +1,5 @@
 // Components
 export { ApiErrorBoundary } from "./components/api-error-boundary";
-export { GlobalErrorBoundary } from "./components/global-error-boundary";
 
 // Types
 export type {
