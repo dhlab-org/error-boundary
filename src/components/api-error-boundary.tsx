@@ -10,10 +10,10 @@ import {
   type FallbackProps,
 } from "react-error-boundary";
 import { P, match } from "ts-pattern";
-import type { PartialErrorConfig } from "../types/api-error";
+import type { TPartialErrorConfig } from "../types/api-error";
 import { getErrorConfig, isApiError } from "../utils/api-error";
 
-type IgnoreErrorType =
+export type TIgnoreErrorType =
   | string
   | number
   | ((error: HTTPError | AxiosError) => boolean);
@@ -28,13 +28,13 @@ const DefaultButton = (props: React.ComponentProps<"button">) => (
   </button>
 );
 
-type ApiErrorBoundaryProps = {
+export type TApiErrorBoundaryProps = {
   children: React.ReactNode;
   FallbackContainer?: React.ComponentType<{ children: React.ReactNode }>;
   Button?: React.ComponentType<React.ComponentProps<"button">>;
-  overrideConfig?: PartialErrorConfig;
+  overrideConfig?: TPartialErrorConfig;
   resetKeys?: ErrorBoundaryProps["resetKeys"];
-  ignoreError?: IgnoreErrorType[];
+  ignoreError?: TIgnoreErrorType[];
 };
 
 export function ApiErrorBoundary({
@@ -46,7 +46,7 @@ export function ApiErrorBoundary({
   overrideConfig,
   resetKeys,
   ignoreError = [],
-}: ApiErrorBoundaryProps) {
+}: TApiErrorBoundaryProps) {
   const handleError: ErrorBoundaryProps["onError"] = (error, info) => {
     if (!isApiError(error)) {
       throw error;
@@ -125,7 +125,7 @@ export function ApiErrorBoundary({
 type ApiErrorFallbackProps = {
   error: HTTPError | AxiosError;
   resetErrorBoundary: FallbackProps["resetErrorBoundary"];
-  overrideConfig?: PartialErrorConfig;
+  overrideConfig?: TPartialErrorConfig;
   Button: React.ComponentType<React.ComponentProps<"button">>;
 };
 

@@ -12,7 +12,7 @@ import {
   it,
   vi,
 } from "vitest";
-import type { PartialErrorConfig } from "../../types/api-error";
+import type { TPartialErrorConfig } from "../../types/api-error";
 import { ApiErrorBoundary } from "../api-error-boundary";
 
 // Mock HTTPError (실제 HTTPError를 사용하되 Response 객체 생성)
@@ -196,7 +196,7 @@ describe("ApiErrorBoundary Integration Tests", () => {
 
   describe("커스텀 설정", () => {
     it("커스텀 fallback 컴포넌트를 사용해야 함", async () => {
-      const customConfig: PartialErrorConfig = {
+      const customConfig: TPartialErrorConfig = {
         404: {
           type: "custom",
           fallback: (
@@ -218,7 +218,7 @@ describe("ApiErrorBoundary Integration Tests", () => {
     });
 
     it("커스텀 fallback 함수를 사용해야 함", async () => {
-      const customConfig: PartialErrorConfig = {
+      const customConfig: TPartialErrorConfig = {
         404: {
           type: "custom",
           fallback: (error, resetErrorBoundary) => (
@@ -307,7 +307,7 @@ describe("ApiErrorBoundary Integration Tests", () => {
   describe("onError 콜백", () => {
     it("에러 발생 시 onError 콜백이 호출되어야 함", async () => {
       const onErrorSpy = vi.fn();
-      const customConfig: PartialErrorConfig = {
+      const customConfig: TPartialErrorConfig = {
         404: {
           type: "default",
           message: "오류가 발생했습니다.",

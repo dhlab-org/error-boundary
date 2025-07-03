@@ -3,28 +3,28 @@ import type { HTTPError } from "ky";
 import type { ErrorInfo } from "react";
 import type { HTTP_ERROR_CONFIG } from "../constants/http-error-message";
 
-export type ErrorConfigElementType =
+export type TErrorConfigElementType =
   (typeof HTTP_ERROR_CONFIG)[keyof typeof HTTP_ERROR_CONFIG];
 
-type OnErrorCallback = (
+type TOnErrorCallback = (
   error: HTTPError | AxiosError,
   info: ErrorInfo,
   statusCode: number,
 ) => void;
 
-type DefaultErrorConfigType = {
+type TDefaultErrorConfigType = {
   type: "default";
-  onError?: OnErrorCallback;
+  onError?: TOnErrorCallback;
 } & Partial<
-  Omit<ErrorConfigElementType, "action" | "message"> & {
-    action: Partial<ErrorConfigElementType["action"]>;
+  Omit<TErrorConfigElementType, "action" | "message"> & {
+    action: Partial<TErrorConfigElementType["action"]>;
     message: string;
   }
 >;
 
-type CustomErrorConfigType = {
+type TCustomErrorConfigType = {
   type: "custom";
-  onError?: OnErrorCallback;
+  onError?: TOnErrorCallback;
   fallback:
     | React.ReactNode
     | ((
@@ -33,8 +33,8 @@ type CustomErrorConfigType = {
       ) => React.ReactNode);
 };
 
-export type PartialErrorConfig = {
+export type TPartialErrorConfig = {
   [K in keyof typeof HTTP_ERROR_CONFIG]?:
-    | ({ type: "default" } & DefaultErrorConfigType)
-    | ({ type: "custom" } & CustomErrorConfigType);
+    | ({ type: "default" } & TDefaultErrorConfigType)
+    | ({ type: "custom" } & TCustomErrorConfigType);
 };

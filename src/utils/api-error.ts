@@ -1,11 +1,11 @@
 import type { AxiosError } from "axios";
 import type { HTTPError } from "ky";
 import { HTTP_ERROR_CONFIG } from "../constants/http-error-message";
-import type { PartialErrorConfig } from "../types/api-error";
+import type { TPartialErrorConfig } from "../types/api-error";
 
 export const getErrorConfig = (
   error: HTTPError | AxiosError,
-  overrideConfig?: PartialErrorConfig,
+  overrideConfig?: TPartialErrorConfig,
 ) => {
   const statusCode = Object.keys(HTTP_ERROR_CONFIG).includes(
     error.response?.status?.toString() ?? "",
