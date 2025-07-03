@@ -1,0 +1,55 @@
+name: Release & Publish
+
+on:
+  push:
+    tags:
+      - 'v*.*.*' # v1.0.0, v1.2.3 등 Semantic Versioning 태그에 반응
+
+permissions:
+  contents: write # GitHub 릴리즈 생성을 위해 필요
+  id-token: write # npm provenance를 위해 필요
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+        
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
+          
+      - name: 의존성 설치
+        run: yarn install --immutable
+        
+      - name: 타입 체크
+        run: yarn type-check
+        
+      - name: 린트 검사
+        run: yarn lint
+        
+      - name: 테스트 실행
+        run: yarn test
+        
+      - name: 빌드
+        run: yarn build
+        
+      - name: npm에 배포
+        run: |
+          # dhlab organization에 public 패키지로 배포
+          npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
+      - name: GitHub 릴리즈 생성
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true # PR 기반 자동 릴리즈 노트 생성
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
