@@ -6,10 +6,7 @@
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "files": ["dist", "README.md", "LICENSE"],
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
