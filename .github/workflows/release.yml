@@ -21,8 +21,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'yarn'
           registry-url: 'https://registry.npmjs.org'
+          
+      - name: Corepack 활성화 및 Yarn Berry 설정
+        run: |
+          corepack enable
+          corepack prepare yarn@4.5.1 --activate
+          yarn --version
           
       - name: 의존성 설치
         run: yarn install --immutable
