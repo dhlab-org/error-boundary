@@ -1,13 +1,16 @@
 # @dhlab/error-boundary
 
-모든 라우터 프레임워크(Next.js, React Router, Tanstack Router 등)와 호환되는 범용 React 에러 바운더리 라이브러리입니다.
+일반적인 에러 바운더리부터 API 에러 전용 처리까지, 모든 에러 처리 요구사항을 하나의 패키지로 해결할 수 있습니다.
 
 ## 특징
 
 - 🔧 **라우터 독립적**: 모든 라우터 라이브러리와 호환 (Next.js, React Router, Tanstack Router 등)
+- 🚀 **완전한 에러 바운더리 솔루션**: 일반 ErrorBoundary + API 특화 ErrorBoundary 모두 제공
+- ⚡ **ignoreError 기능**: 특정 에러를 무시하고 상위로 전파 (문자열, 숫자, 함수 패턴 지원)
 - 🎯 **HTTP 에러 처리**: API 에러 전용 처리 및 사용자 정의 액션 지원
 - 🌐 **다중 HTTP 클라이언트**: ky와 axios 모두 지원
 - 🔄 **유연한 액션**: 최대 호환성을 위한 네이티브 브라우저 History API 사용
+- 📦 **의존성 통합**: react-error-boundary 기능을 BaseErrorBoundary로 재내보내기
 - 📱 **SSR 안전**: 클라이언트와 서버 환경 모두에서 동작
 - 🎨 **커스터마이징 가능**: 자체 컴포넌트 사용 또는 내장 기본값 사용
 
@@ -24,16 +27,104 @@ pnpm add @dhlab/error-boundary
 ### Peer Dependencies
 
 ```bash
-npm install react react-dom @tanstack/react-query react-error-boundary
+npm install react react-dom @tanstack/react-query
 
-# HTTP 클라이언트 중 하나 이상 설치
+# HTTP 클라이언트 중 하나 이상 설치 (ApiErrorBoundary 사용 시)
 npm install ky          # ky 사용 시
 npm install axios       # axios 사용 시
 ```
 
+> 📦 **참고**: `react-error-boundary`는 더 이상 별도로 설치할 필요가 없습니다. 모든 기능이 `BaseErrorBoundary`로 재내보내집니다.
+
+## 패키지 구조
+
+이 라이브러리는 계층적 구조로 설계되어 다양한 사용 사례를 지원합니다:
+
+```
+BaseErrorBoundary (react-error-boundary 재내보내기)
+    ↓
+ErrorBoundary (일반 에러 바운더리 + ignoreError 기능)
+    ↓  
+ApiErrorBoundary (API 에러 특화 처리)
+```
+
+### 어떤 컴포넌트를 사용해야 할까요?
+
+- **ErrorBoundary**: 일반적인 JavaScript 에러 처리 + ignoreError 기능이 필요한 경우
+- **ApiErrorBoundary**: HTTP API 에러를 특별히 처리하고 싶은 경우 (상태 코드별 메시지, 액션 등)
+- **BaseErrorBoundary**: 기존 `react-error-boundary` 사용자가 마이그레이션 없이 사용하는 경우
+
 ## 빠른 시작
 
-### 1. 기본 사용법
+### 1. 일반 ErrorBoundary 사용법
+
+```tsx
+import { ErrorBoundary } from '@dhlab/error-boundary';
+
+function MyApp() {
+  return (
+    <ErrorBoundary
+      fallbackRender={({ error, resetErrorBoundary }) => (
+        <div>
+          <h2>오류가 발생했습니다</h2>
+          <p>{error.message}</p>
+          <button onClick={resetErrorBoundary}>다시 시도</button>
+        </div>
+      )}
+    >
+      <MyComponent />
+    </ErrorBoundary>
+  );
+}
+```
+
+#### ignoreError 기능
+
+특정 에러를 무시하고 상위로 전파시킬 수 있습니다:
+
+```tsx
+import { ErrorBoundary } from '@dhlab/error-boundary';
+
+function MyApp() {
+  return (
+    <ErrorBoundary
+      ignoreError={[
+        'ChunkLoadError',           // 문자열 패턴으로 무시
+        404,                        // 숫자 패턴으로 무시
+        (error) => error.name === 'NetworkError'  // 함수로 조건부 무시
+      ]}
+      fallbackRender={({ error, resetErrorBoundary }) => (
+        <div>에러: {error.message}</div>
+      )}
+    >
+      <MyComponent />
+    </ErrorBoundary>
+  );
+}
+```
+
+### 2. BaseErrorBoundary 사용법
+
+기존 `react-error-boundary`와 동일한 API를 제공합니다:
+
+```tsx
+import { BaseErrorBoundary } from '@dhlab/error-boundary';
+
+function MyApp() {
+  return (
+    <BaseErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onError={(error, errorInfo) => console.log(error)}
+    >
+      <MyComponent />
+    </BaseErrorBoundary>
+  );
+}
+```
+
+### 3. ApiErrorBoundary 사용법
+
+API 에러 전용 처리:
 
 ```tsx
 import { ApiErrorBoundary } from '@dhlab/error-boundary';
@@ -184,7 +275,34 @@ function MyPage() {
 
 ## API 참조
 
+### ErrorBoundary
+
+일반적인 에러 바운더리 컴포넌트입니다. `react-error-boundary`의 모든 기능 + `ignoreError` 기능을 제공합니다.
+
+| Prop | 타입 | 기본값 | 설명 |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | 에러 바운더리로 감쌀 컴포넌트들 |
+| `fallback` | `ReactNode` | - | 에러 발생 시 보여줄 정적 컴포넌트 |
+| `FallbackComponent` | `ComponentType<FallbackProps>` | - | 에러 발생 시 사용할 컴포넌트 |
+| `fallbackRender` | `(props: FallbackProps) => ReactNode` | - | 에러 발생 시 실행할 렌더 함수 |
+| `onError` | `(error: Error, errorInfo: ErrorInfo) => void` | - | 에러 발생 시 실행할 콜백 |
+| `onReset` | `() => void` | - | 에러 바운더리 리셋 시 실행할 콜백 |
+| `resetKeys` | `Array<string\|number\|boolean\|null\|undefined>` | - | 에러 바운더리 리셋을 트리거하는 키들 |
+| `resetOnPropsChange` | `boolean` | `false` | props 변경 시 자동 리셋 여부 |
+| `ignoreError` | `Array<string\|number\|((error: Error) => boolean)>` | `[]` | 무시할 에러 패턴들 |
+
+### BaseErrorBoundary
+
+`react-error-boundary`의 `ErrorBoundary`와 동일한 API를 제공합니다. 기존 `react-error-boundary` 사용자를 위한 호환성 레이어입니다.
+
+```tsx
+import { BaseErrorBoundary } from '@dhlab/error-boundary';
+// react-error-boundary의 ErrorBoundary와 동일하게 사용 가능
+```
+
 ### ApiErrorBoundary
+
+API 에러 전용 에러 바운더리 컴포넌트입니다.
 
 | Prop | 타입 | 기본값 | 설명 |
 |------|------|---------|-------------|
