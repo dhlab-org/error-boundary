@@ -1,16 +1,12 @@
 {
   "name": "@dhlab/error-boundary",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "A universal React error boundary library that works with any router",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
+  "files": ["dist", "README.md", "LICENSE"],
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
