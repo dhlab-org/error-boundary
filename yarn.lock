@@ -263,8 +263,8 @@ __metadata:
     whatwg-fetch: "npm:^3.6.20"
   peerDependencies:
     "@tanstack/react-query": ^4.0.0 || ^5.0.0
-    react: ^17.0.0 || ^18.0.0
-    react-dom: ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     axios:
       optional: true
