@@ -187,9 +187,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dhlab-org/error-boundary@workspace:.":
+"@dhlab/error-boundary@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@dhlab-org/error-boundary@workspace:."
+  resolution: "@dhlab/error-boundary@workspace:."
   dependencies:
     "@biomejs/biome": "npm:^1.8.0"
     "@rollup/plugin-commonjs": "npm:^25.0.0"
