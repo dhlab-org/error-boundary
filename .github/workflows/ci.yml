@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: 'https://registry.npmjs.org'
+    
+    - name: Corepack 활성화 및 Yarn Berry 설정
+      run: |
+        corepack enable
+        corepack prepare yarn@4.5.1 --activate
+        yarn --version
+    
+    - name: Install dependencies
+      run: yarn install --immutable
+    
+    - name: Run type check
+      run: yarn type-check
+    
+    - name: Run linter
+      run: yarn lint
+    
+    - name: Run tests
+      run: yarn test
+    
+    - name: Run build
+      run: yarn build
+
+  # 추가 검사 (optional)
+  coverage:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        registry-url: 'https://registry.npmjs.org'
+    
+    - name: Corepack 활성화 및 Yarn Berry 설정
+      run: |
+        corepack enable
+        corepack prepare yarn@4.5.1 --activate
+        yarn --version
+    
+    - name: Install dependencies
+      run: yarn install --immutable
+    
+    - name: Run test coverage
+      run: yarn test:coverage
+    
+    - name: Upload coverage to Codecov (optional)
+      uses: codecov/codecov-action@v3
+      with:
+        fail_ci_if_error: false 
