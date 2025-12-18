@@ -46,7 +46,7 @@ jobs:
         
       - name: npm에 배포
         run: |
-          # dhlab organization에 public 패키지로 배포
+          # jjades organization에 public 패키지로 배포
           npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

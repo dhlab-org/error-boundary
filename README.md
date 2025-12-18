@@ -1,6 +1,4 @@
-# @dhlab/error-boundary
-
-> ⚠️ DEPRECATED: 이 패키지는 더 이상 사용되지 않습니다. 이제부터는 [@jjades/error-boundary](https://www.npmjs.com/package/@jjades/error-boundary)에서 관리됩니다.
+# @jjades/error-boundary
 
 일반적인 에러 바운더리부터 API 에러 전용 처리까지, 모든 에러 처리 요구사항을 하나의 패키지로 해결할 수 있습니다.
 
@@ -19,11 +17,11 @@
 ## 설치
 
 ```bash
-npm install @dhlab/error-boundary
+npm install @jjades/error-boundary
 # 또는
-yarn add @dhlab/error-boundary
+yarn add @jjades/error-boundary
 # 또는
-pnpm add @dhlab/error-boundary
+pnpm add @jjades/error-boundary
 ```
 
 ### Peer Dependencies
@@ -61,7 +59,7 @@ ApiErrorBoundary (API 에러 특화 처리)
 ### 1. 일반 ErrorBoundary 사용법
 
 ```tsx
-import { ErrorBoundary } from '@dhlab/error-boundary';
+import { ErrorBoundary } from '@jjades/error-boundary';
 
 function MyApp() {
   return (
@@ -85,7 +83,7 @@ function MyApp() {
 특정 에러를 무시하고 상위로 전파시킬 수 있습니다:
 
 ```tsx
-import { ErrorBoundary } from '@dhlab/error-boundary';
+import { ErrorBoundary } from '@jjades/error-boundary';
 
 function MyApp() {
   return (
@@ -110,7 +108,7 @@ function MyApp() {
 기존 `react-error-boundary`와 동일한 API를 제공합니다:
 
 ```tsx
-import { BaseErrorBoundary } from '@dhlab/error-boundary';
+import { BaseErrorBoundary } from '@jjades/error-boundary';
 
 function MyApp() {
   return (
@@ -129,7 +127,7 @@ function MyApp() {
 API 에러 전용 처리:
 
 ```tsx
-import { ApiErrorBoundary } from '@dhlab/error-boundary';
+import { ApiErrorBoundary } from '@jjades/error-boundary';
 
 function MyPage() {
   return (
@@ -146,7 +144,7 @@ function MyPage() {
 
 ```tsx
 // app/layout.tsx
-import { ApiErrorBoundary } from '@dhlab/error-boundary';
+import { ApiErrorBoundary } from '@jjades/error-boundary';
 
 export default function RootLayout({ children }) {
   return (
@@ -161,7 +159,7 @@ export default function RootLayout({ children }) {
 }
 
 // 페이지 컴포넌트
-import { ApiErrorBoundary } from '@dhlab/error-boundary';
+import { ApiErrorBoundary } from '@jjades/error-boundary';
 
 export default function Page() {
   return (
@@ -177,7 +175,7 @@ export default function Page() {
 ### 사용자 정의 버튼 컴포넌트
 
 ```tsx
-import { ApiErrorBoundary } from '@dhlab/error-boundary';
+import { ApiErrorBoundary } from '@jjades/error-boundary';
 
 const MyButton = ({ onClick, children, className }) => (
   <button 
@@ -200,7 +198,7 @@ function MyPage() {
 ### 사용자 정의 에러 메시지
 
 ```tsx
-import { ApiErrorBoundary, type PartialErrorConfig } from '@dhlab/error-boundary';
+import { ApiErrorBoundary, type PartialErrorConfig } from '@jjades/error-boundary';
 
 const customConfig: PartialErrorConfig = {
   404: {
@@ -230,7 +228,7 @@ function MyPage() {
 ### 동적 에러 UI (fallback 함수)
 
 ```tsx
-import { ApiErrorBoundary } from '@dhlab/error-boundary';
+import { ApiErrorBoundary } from '@jjades/error-boundary';
 
 const customConfig = {
   500: {
@@ -257,7 +255,7 @@ function MyPage() {
 ### 사용자 정의 컨테이너
 
 ```tsx
-import { ApiErrorBoundary } from '@dhlab/error-boundary';
+import { ApiErrorBoundary } from '@jjades/error-boundary';
 
 const ErrorContainer = ({ children }) => (
   <div className="error-container">
@@ -298,7 +296,7 @@ function MyPage() {
 `react-error-boundary`의 `ErrorBoundary`와 동일한 API를 제공합니다. 기존 `react-error-boundary` 사용자를 위한 호환성 레이어입니다.
 
 ```tsx
-import { BaseErrorBoundary } from '@dhlab/error-boundary';
+import { BaseErrorBoundary } from '@jjades/error-boundary';
 // react-error-boundary의 ErrorBoundary와 동일하게 사용 가능
 ```
 
@@ -329,7 +327,7 @@ API 에러 전용 에러 바운더리 컴포넌트입니다.
 특정 에러를 무시하고 상위로 전파시키려면:
 
 ```tsx
-import { ApiErrorBoundary } from '@dhlab/error-boundary';
+import { ApiErrorBoundary } from '@jjades/error-boundary';
 
 function MyPage() {
   return (
@@ -398,4 +396,4 @@ npm run test:coverage
 
 ## 라이선스
 
-MIT © dhlab-fe 
+MIT © jjades-fe 
