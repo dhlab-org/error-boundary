@@ -1,5 +1,7 @@
 # @dhlab/error-boundary
 
+> ⚠️ DEPRECATED: 이 패키지는 더 이상 사용되지 않습니다. 이제부터는 [@jjades/error-boundary](https://www.npmjs.com/package/@jjades/error-boundary)에서 관리됩니다.
+
 일반적인 에러 바운더리부터 API 에러 전용 처리까지, 모든 에러 처리 요구사항을 하나의 패키지로 해결할 수 있습니다.
 
 ## 특징
